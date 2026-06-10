@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root {
+  color-scheme: dark;
+}
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  background: #090b13;
+  color: #98a0b3;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  background-image:
+    radial-gradient(
+      circle at 50% -15%,
+      rgba(139, 92, 246, 0.14),
+      transparent 30%
+    ),
+    linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+  background-size:
+    auto,
+    64px 64px,
+    64px 64px;
+}
+@layer components {
+  .section-shell {
+    @apply mx-auto max-w-7xl border-t border-white/10 px-6 py-16 md:py-20;
+  }
+  .eyebrow {
+    @apply font-mono text-[10px] font-semibold tracking-[.2em] text-lime;
+  }
+  h2 {
+    @apply text-3xl font-semibold tracking-[-.035em] text-white md:text-4xl;
+  }
+  h3 {
+    @apply mt-8 text-xl font-semibold tracking-tight text-white;
+  }
+  .section-copy {
+    @apply max-w-lg text-sm leading-6 text-slate-500;
+  }
+  .card {
+    @apply rounded-2xl border border-white/[.09] bg-panel/80 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,.025)] transition hover:border-white/[.16];
+  }
+  .card-label {
+    @apply font-mono text-[10px] font-semibold tracking-[.16em] text-slate-500;
+  }
+  .region-tag {
+    @apply rounded-full border border-lime/20 bg-lime/10 px-3 py-1 font-mono text-[10px] font-semibold text-lime;
+  }
+  .live-dot {
+    @apply rounded-full border border-lime/20 bg-lime/10 px-3 py-1.5 font-mono text-[10px] text-lime;
+  }
+}

@@ -216,3 +216,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Next.js / local environment
+.next/
+.env*.local
+*.tsbuildinfo
+
+# Application source (override generic Python lib/ ignore)
+!lib/
+!lib/**
