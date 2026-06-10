@@ -225,3 +225,4 @@ __marimo__/
 # Application source (override generic Python lib/ ignore)
 !lib/
 !lib/**
+.rocketride/
