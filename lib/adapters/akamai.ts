@@ -1,9 +1,16 @@
 import { Region } from "@/lib/types";
-export interface RoutingAdapter {
-  route(
-    region: Region,
-  ): Promise<{ edge: string; region: Region; overheadMs: number }>;
+
+export interface RouteDecision {
+  edge: string;
+  region: Region;
+  overheadMs: number;
+  provider: "mock-akamai" | "akamai";
 }
+
+export interface RoutingAdapter {
+  route(region: Region): Promise<RouteDecision>;
+}
+
 export class MockAkamaiRoutingAdapter implements RoutingAdapter {
   async route(region: Region) {
     const edges: Record<Region, string> = {
@@ -15,6 +22,7 @@ export class MockAkamaiRoutingAdapter implements RoutingAdapter {
     return {
       edge: edges[region],
       region,
+      provider: "mock-akamai" as const,
       overheadMs:
         region === "Global"
           ? 12
@@ -26,4 +34,5 @@ export class MockAkamaiRoutingAdapter implements RoutingAdapter {
     };
   }
 }
+
 export const routingAdapter: RoutingAdapter = new MockAkamaiRoutingAdapter();

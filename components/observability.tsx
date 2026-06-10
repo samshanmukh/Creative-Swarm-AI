@@ -21,6 +21,14 @@ export function Observability({ runs }: { runs: AgentRun[] }) {
     runs.reduce((s, r) => s + r.latencyMs, 0) / Math.max(runs.length, 1),
   );
   const regions = new Set(runs.map((r) => r.region)).size;
+  const wallClock = Math.max(
+    ...runs.map(
+      (run) =>
+        new Date(run.startedAt).getTime() +
+        run.latencyMs -
+        Math.min(...runs.map((item) => new Date(item.startedAt).getTime())),
+    ),
+  );
   return (
     <section id="observability" className="section-shell">
       <div className="eyebrow">06 / OPERATIONS</div>
@@ -33,7 +41,7 @@ export function Observability({ runs }: { runs: AgentRun[] }) {
         </div>
         <span className="live-dot">● LIVE TRACE</span>
       </div>
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Metric
           label="Agents completed"
           value={`${runs.length}/9`}
@@ -48,6 +56,11 @@ export function Observability({ runs }: { runs: AgentRun[] }) {
           label="Tokens used"
           value={totalTokens.toLocaleString()}
           detail={`${regions} active regions`}
+        />
+        <Metric
+          label="Wall-clock runtime"
+          value={`${wallClock} ms`}
+          detail="Fan-out execution"
         />
       </div>
       <div className="mt-5 grid gap-5 lg:grid-cols-[1fr_1.4fr]">
@@ -96,7 +109,7 @@ export function Observability({ runs }: { runs: AgentRun[] }) {
                     {run.agentName}
                   </p>
                   <p className="text-[11px] text-slate-500">
-                    {run.region} edge · {run.tokensUsed} tokens
+                    {run.region} · {run.edge} · {run.tokensUsed} tokens
                   </p>
                 </div>
                 <div className="text-right">

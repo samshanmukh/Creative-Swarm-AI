@@ -7,10 +7,17 @@ export function ProductForm() {
   const [product, setProduct] = useState(DEMO_PRODUCT);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [stage, setStage] = useState("");
+
   async function submit(event: FormEvent) {
     event.preventDefault();
     setLoading(true);
     setError("");
+    setStage("Routing brief to the swarm");
+    const stageTimer = window.setTimeout(
+      () => setStage("Agents are building regional creative"),
+      700,
+    );
     try {
       const response = await fetch("/api/campaigns", {
         method: "POST",
@@ -18,11 +25,15 @@ export function ProductForm() {
         body: JSON.stringify({ product }),
       });
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error);
+      if (!response.ok) throw new Error(data.error || "Campaign generation failed");
+      setStage("Campaign ready");
       router.push(`/campaign/${data.id}`);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong");
       setLoading(false);
+      setStage("");
+    } finally {
+      window.clearTimeout(stageTimer);
     }
   }
   return (
@@ -34,19 +45,22 @@ export function ProductForm() {
         aria-label="Product URL or description"
         value={product}
         onChange={(e) => setProduct(e.target.value)}
+        maxLength={2000}
         rows={3}
         className="w-full resize-none bg-transparent px-4 py-4 text-lg text-white outline-none placeholder:text-slate-500"
         placeholder="Paste a product URL or describe what you’re launching…"
       />
       <div className="flex items-center justify-between border-t border-white/10 px-3 pt-3">
         <span className="hidden text-xs text-slate-500 sm:block">
-          9 specialized agents · 3 edge regions · one creative brief
+          {loading
+            ? stage
+            : "9 specialized agents · 3 edge regions · one creative brief"}
         </span>
         <button
           disabled={loading}
           className="rounded-full bg-lime px-6 py-3 text-sm font-bold text-ink transition hover:scale-[1.02] disabled:opacity-60"
         >
-          {loading ? "Deploying swarm…" : "Generate campaign →"}
+          {loading ? "Deploying swarm..." : "Generate campaign →"}
         </button>
       </div>
       {error && <p className="px-3 pt-2 text-sm text-red-400">{error}</p>}

@@ -1,4 +1,12 @@
 import { ProductForm } from "@/components/product-form";
+
+const swarmSteps = [
+  ["01", "Discover", "Trend + research agents find the market signal."],
+  ["02", "Strategize", "A strategy agent turns signal into campaign angles."],
+  ["03", "Distribute", "Regional agents localize for US, EU, and APAC."],
+  ["04", "Create", "Visual + Magnific agents prepare campaign assets."],
+];
+
 export default function Home() {
   return (
     <main className="relative min-h-screen overflow-hidden">
@@ -40,6 +48,27 @@ export default function Home() {
           <Stat value="9" label="specialized agents" />
           <Stat value="3" label="edge regions" />
           <Stat value="1" label="unified campaign" />
+        </div>
+      </section>
+      <section className="mx-auto max-w-7xl border-t border-white/10 px-6 py-20">
+        <div className="grid gap-8 lg:grid-cols-[.75fr_1.25fr]">
+          <div>
+            <p className="eyebrow">HOW THE SWARM WORKS</p>
+            <h2 className="mt-4 max-w-md">Distributed by design.</h2>
+            <p className="section-copy mt-4">
+              One orchestrated workflow, routed across mock Akamai edge regions
+              and built to swap cleanly to real infrastructure.
+            </p>
+          </div>
+          <div className="grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-2">
+            {swarmSteps.map(([number, title, copy]) => (
+              <div className="bg-ink p-6" key={number}>
+                <p className="font-mono text-[10px] text-lime">{number}</p>
+                <h3 className="mt-5">{title}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-500">{copy}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </main>

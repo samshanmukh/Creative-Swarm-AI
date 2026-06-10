@@ -2,14 +2,36 @@
 
 A hackathon-ready distributed AI creative campaign generator. Creative Swarm turns a product description into market signals, global strategy, localized creative for US/EU/APAC, visual prompts, Magnific enhancement placeholders, and a complete execution trace.
 
+## What the demo does
+
+1. Accepts a product URL or description.
+2. Runs Trend and Research agents in parallel.
+3. Feeds their findings into a Strategy agent.
+4. Fans strategy out to US, EU, APAC, and Visual Prompt agents.
+5. Sends visual concepts through the Magnific adapter.
+6. Runs a final Critic agent.
+7. Shows the campaign and a distributed execution trace.
+
 ## Architecture
 
-- **Next.js App Router + TypeScript + Tailwind** for UI and API routes.
-- **Agent orchestrator** runs nine specialized agents in parallel.
-- **Adapter interfaces** isolate Akamai routing, Magnific enhancement, and model inference so mock implementations can be replaced cleanly.
+```text
+Product brief
+  └─ TrendAgent + ResearchAgent              (parallel)
+       └─ StrategyAgent
+            ├─ USRegionalAgent               (Akamai US edge)
+            ├─ EURegionalAgent               (Akamai EU edge)
+            ├─ APACRegionalAgent             (Akamai APAC edge)
+            └─ VisualPromptAgent
+                 └─ MagnificAgent
+                      └─ CriticAgent
+```
+
+- **Next.js App Router + TypeScript + Tailwind** power the UI and API routes.
+- **Staged agent orchestrator** passes typed outputs between nine specialist agents.
+- **Adapter interfaces** isolate Akamai routing, Magnific enhancement, and model inference.
 - **Mock-first mode** is deterministic, fast, and requires no credentials.
-- **OpenAI mode** is enabled only through `USE_REAL_OPENAI=true`.
-- **In-memory campaign store** keeps the MVP intentionally simple; replace it with a persistent database for production.
+- **OpenAI mode** uses JSON agent responses and is enabled only through `USE_REAL_OPENAI=true`.
+- **In-memory campaign store** keeps the hackathon MVP simple. Replace it with a database before production.
 
 ## Quick start
 
@@ -39,7 +61,7 @@ Never commit `.env.local` or credentials.
 
 - `POST /api/campaigns` — run the full distributed workflow
 - `GET /api/campaigns/:id` — fetch campaign output
-- `POST /api/agents/run` — run one named agent
+- `POST /api/agents/run` — run one named agent with optional upstream context
 - `POST /api/magnific/enhance` — submit a mock enhancement job
 - `GET /api/observability/:campaignId` — fetch workflow telemetry
 
@@ -51,6 +73,30 @@ curl -X POST http://localhost:3000/api/campaigns \
   -d '{"product":"An AI coding assistant that automates repetitive developer workflows."}'
 ```
 
+Each agent trace includes:
+
+```json
+{
+  "agentName": "EURegionalAgent",
+  "region": "EU",
+  "input": "...",
+  "output": "...",
+  "latencyMs": 243,
+  "tokensUsed": 318,
+  "status": "completed",
+  "edge": "fra-edge-03",
+  "startedAt": "2026-06-10T16:30:00.000Z"
+}
+```
+
 ## Replacing mock integrations
 
-Implement `RoutingAdapter` in `lib/adapters/akamai.ts` and `MagnificAdapter` in `lib/adapters/magnific.ts`, then swap the exported adapter instance. Agent call sites do not need to change.
+Implement `RoutingAdapter` in `lib/adapters/akamai.ts` and `MagnificAdapter` in `lib/adapters/magnific.ts`, then swap the exported adapter instances. Agent call sites do not need to change.
+
+The OpenAI adapter is already implemented in `lib/adapters/inference.ts`. Set `USE_REAL_OPENAI=true` and provide `OPENAI_API_KEY` to use it.
+
+## MVP notes
+
+- Generated campaigns are stored in memory and reset when the server restarts.
+- Akamai and Magnific are intentionally mocked behind production-shaped interfaces.
+- `npm install` currently reports two upstream dependency audit findings. Review dependency upgrades before production use.

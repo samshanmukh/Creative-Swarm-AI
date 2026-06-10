@@ -6,6 +6,8 @@ export const demoCampaign: Campaign = {
   id: "demo-swarm-001",
   product: DEMO_PRODUCT,
   createdAt: new Date("2026-06-10T09:30:00Z").toISOString(),
+  mode: "mock",
+  status: "completed",
   trendInsights: [
     "AI coding agents are shifting from autocomplete to autonomous, multi-step workflows.",
     "MCP is becoming the connective tissue between developer tools and AI agents.",
@@ -81,6 +83,8 @@ export const demoCampaign: Campaign = {
         "https://placehold.co/800x1000/171a28/c7ff47?text=Magnific+Enhanced+03",
     },
   ],
+  criticSummary:
+    "The campaign is cohesive across regions, makes the product differentiation clear, and balances speed with a credible sense of user control.",
   agentRuns: [
     ["TrendAgent", "Global", 228, 291],
     ["ResearchAgent", "Global", 246, 318],
@@ -91,13 +95,24 @@ export const demoCampaign: Campaign = {
     ["VisualPromptAgent", "Global", 251, 327],
     ["MagnificAgent", "Global", 194, 237],
     ["CriticAgent", "Global", 205, 219],
-  ].map(([agentName, region, latencyMs, tokensUsed]) => ({
-    agentName: agentName as string,
+  ].map(([agentName, region, latencyMs, tokensUsed], index) => ({
+    agentName: agentName as import("@/lib/types").AgentName,
     region: region as "Global" | "US" | "EU" | "APAC",
     input: `${DEMO_PRODUCT} · routed through mock Akamai edge`,
     output: `${agentName} completed its assigned creative task.`,
     latencyMs: latencyMs as number,
     tokensUsed: tokensUsed as number,
     status: "completed" as const,
+    edge:
+      region === "US"
+        ? "iad-edge-07"
+        : region === "EU"
+          ? "fra-edge-03"
+          : region === "APAC"
+            ? "sin-edge-12"
+            : "global-orchestrator",
+    startedAt: new Date(
+      new Date("2026-06-10T09:30:00Z").getTime() + index * 90,
+    ).toISOString(),
   })),
 };

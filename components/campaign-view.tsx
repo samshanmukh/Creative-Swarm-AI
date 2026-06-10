@@ -1,6 +1,11 @@
 import { Campaign } from "@/lib/types";
 import { Observability } from "@/components/observability";
 export function CampaignView({ campaign }: { campaign: Campaign }) {
+  const totalTokens = campaign.agentRuns.reduce(
+    (sum, run) => sum + run.tokensUsed,
+    0,
+  );
+
   return (
     <main className="pb-24">
       <header className="border-b border-white/10">
@@ -35,7 +40,39 @@ export function CampaignView({ campaign }: { campaign: Campaign }) {
           <Pill>9 agents completed</Pill>
           <Pill>US · EU · APAC</Pill>
           <Pill>Mock Akamai edge</Pill>
-          <Pill>Magnific ready</Pill>
+          <Pill>{campaign.mode === "openai" ? "OpenAI live" : "Mock inference"}</Pill>
+          <Pill>{totalTokens.toLocaleString()} tokens</Pill>
+        </div>
+      </section>
+      <section className="mx-auto max-w-7xl px-6 pb-16">
+        <div className="overflow-hidden rounded-2xl border border-white/10 bg-panel/70">
+          <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+            <p className="card-label">LIVE WORKFLOW MAP</p>
+            <span className="text-[10px] text-lime">COMPLETE</span>
+          </div>
+          <div className="grid gap-0 md:grid-cols-4">
+            <WorkflowStage
+              label="DISCOVER"
+              agents="Trend + Research"
+              region="GLOBAL"
+            />
+            <WorkflowStage
+              label="STRATEGIZE"
+              agents="Strategy"
+              region="GLOBAL"
+            />
+            <WorkflowStage
+              label="LOCALIZE"
+              agents="US + EU + APAC"
+              region="3 EDGES"
+            />
+            <WorkflowStage
+              label="DELIVER"
+              agents="Visual + Magnific + Critic"
+              region="GLOBAL"
+              last
+            />
+          </div>
         </div>
       </section>
       <Section
@@ -153,8 +190,44 @@ export function CampaignView({ campaign }: { campaign: Campaign }) {
           ))}
         </div>
       </Section>
+      <section className="section-shell">
+        <div className="rounded-2xl border border-lime/20 bg-lime/[.045] p-6 md:flex md:items-center md:justify-between md:gap-12">
+          <div>
+            <p className="eyebrow">CRITIC AGENT / FINAL VERDICT</p>
+            <h2 className="mt-3 text-2xl md:text-3xl">Creative is cleared to ship.</h2>
+          </div>
+          <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-400 md:mt-0">
+            {campaign.criticSummary}
+          </p>
+        </div>
+      </section>
       <Observability runs={campaign.agentRuns} />
     </main>
+  );
+}
+
+function WorkflowStage({
+  label,
+  agents,
+  region,
+  last = false,
+}: {
+  label: string;
+  agents: string;
+  region: string;
+  last?: boolean;
+}) {
+  return (
+    <div
+      className={`relative border-white/10 p-5 md:border-r ${last ? "md:border-r-0" : ""}`}
+    >
+      {!last && (
+        <span className="absolute right-[-5px] top-1/2 z-10 hidden h-2 w-2 -translate-y-1/2 rounded-full bg-lime shadow-[0_0_15px_#c7ff47] md:block" />
+      )}
+      <p className="font-mono text-[9px] tracking-[.18em] text-lime">{region}</p>
+      <p className="mt-5 text-sm font-semibold text-white">{label}</p>
+      <p className="mt-1 text-xs text-slate-500">{agents}</p>
+    </div>
   );
 }
 function Section({
