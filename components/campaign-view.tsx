@@ -1,9 +1,16 @@
 import { Campaign } from "@/lib/types";
 import { Observability } from "@/components/observability";
+import { AkamaiInfrastructurePanel } from "@/components/akamai-infrastructure";
 export function CampaignView({ campaign }: { campaign: Campaign }) {
   const totalTokens = campaign.agentRuns.reduce(
     (sum, run) => sum + run.tokensUsed,
     0,
+  );
+  const usesAkamaiCloud = campaign.agentRuns.some(
+    (run) => run.routeProvider === "akamai-cloud",
+  );
+  const infrastructureRegions = Array.from(
+    new Set(campaign.agentRuns.map((run) => run.infrastructureRegion)),
   );
 
   return (
@@ -39,10 +46,14 @@ export function CampaignView({ campaign }: { campaign: Campaign }) {
         <div className="mt-8 flex flex-wrap gap-2">
           <Pill>9 agents completed</Pill>
           <Pill>US · EU · APAC</Pill>
-          <Pill>Mock Akamai edge</Pill>
+          <Pill>{usesAkamaiCloud ? "Akamai Cloud live" : "Mock Akamai routing"}</Pill>
+          <Pill>{infrastructureRegions.join(" · ")}</Pill>
           <Pill>{campaign.mode === "openai" ? "OpenAI live" : "Mock inference"}</Pill>
           <Pill>{totalTokens.toLocaleString()} tokens</Pill>
         </div>
+      </section>
+      <section className="mx-auto max-w-7xl px-6 pb-16">
+        <AkamaiInfrastructurePanel compact />
       </section>
       <section className="mx-auto max-w-7xl px-6 pb-16">
         <div className="overflow-hidden rounded-2xl border border-white/10 bg-panel/70">
@@ -64,7 +75,7 @@ export function CampaignView({ campaign }: { campaign: Campaign }) {
             <WorkflowStage
               label="LOCALIZE"
               agents="US + EU + APAC"
-              region="3 EDGES"
+              region={usesAkamaiCloud ? "AKAMAI CLOUD" : "3 MOCK EDGES"}
             />
             <WorkflowStage
               label="DELIVER"
@@ -165,26 +176,37 @@ export function CampaignView({ campaign }: { campaign: Campaign }) {
       <Section
         num="05"
         label="MAGNIFIC ENHANCEMENT"
-        title="Assets prepared for polish"
-        copy="Mock enhancement jobs preserve a clean integration seam for the Magnific API."
+        title="Visual assets"
+        copy={
+          campaign.visualConcepts.some((concept) => concept.assetProvider === "magnific")
+            ? "Visuals enhanced through the live Magnific provider."
+            : "Preview assets are rendered from the mock adapter. VS Code MCP authentication is not shared with the app runtime."
+        }
       >
         <div className="grid gap-4 lg:grid-cols-3">
           {campaign.visualConcepts.map((v, i) => (
             <div className="card" key={v.assetUrl}>
-              <div className="flex aspect-[3/2] items-center justify-center rounded-xl border border-white/[.08] bg-gradient-to-br from-violet/20 via-panel to-lime/10">
-                <div className="text-center">
-                  <span className="text-3xl">✦</span>
-                  <p className="mt-3 text-xs font-medium text-white">
-                    MAGNIFIC ENHANCED 0{i + 1}
-                  </p>
-                  <p className="mt-1 text-[10px] text-slate-500">
-                    Placeholder · high resolution
-                  </p>
-                </div>
+              <div className="relative aspect-[3/2] overflow-hidden rounded-xl border border-white/[.08] bg-panel">
+                {/* External providers return arbitrary signed URLs, so use a native image element. */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={v.assetUrl}
+                  alt={`${v.title} visual asset`}
+                  className="h-full w-full object-cover"
+                />
+                <span className="absolute left-3 top-3 rounded-full border border-white/10 bg-black/60 px-3 py-1 font-mono text-[9px] text-white backdrop-blur">
+                  ASSET 0{i + 1}
+                </span>
               </div>
               <div className="mt-4 flex items-center justify-between">
                 <p className="text-sm text-slate-300">{v.title}</p>
-                <span className="text-xs text-lime">READY</span>
+                <span
+                  className={`text-[10px] ${
+                    v.assetProvider === "magnific" ? "text-lime" : "text-amber-400"
+                  }`}
+                >
+                  {v.assetProvider === "magnific" ? "MAGNIFIC LIVE" : "MOCK PREVIEW"}
+                </span>
               </div>
             </div>
           ))}

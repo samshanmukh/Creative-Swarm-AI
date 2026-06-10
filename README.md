@@ -50,6 +50,10 @@ Open http://localhost:3000 or jump directly to the seeded demo at http://localho
 | `USE_REAL_OPENAI`      | Set to `true` to use OpenAI inference instead of mock outputs |
 | `OPENAI_API_KEY`       | OpenAI API credential                                         |
 | `OPENAI_MODEL`         | Optional model override; defaults to `gpt-4o-mini`            |
+| `USE_REAL_AKAMAI`      | Set to `true` to use live Akamai Cloud routing metadata       |
+| `AKAMAI_CLOUD_TOKEN`   | Akamai Cloud personal access token                            |
+| `AKAMAI_LINODE_ID`     | Optional preferred primary Linode ID                          |
+| `AKAMAI_LINODE_LABEL`  | Optional preferred primary Linode label                       |
 | `MAGNIFIC_API_KEY`     | Reserved for the future real Magnific adapter                 |
 | `AKAMAI_CLIENT_TOKEN`  | Reserved for the future real Akamai adapter                   |
 | `AKAMAI_CLIENT_SECRET` | Reserved for the future real Akamai adapter                   |
@@ -64,6 +68,7 @@ Never commit `.env.local` or credentials.
 - `POST /api/agents/run` — run one named agent with optional upstream context
 - `POST /api/magnific/enhance` — submit a mock enhancement job
 - `GET /api/observability/:campaignId` — fetch workflow telemetry
+- `GET /api/akamai/infrastructure` — fetch live Akamai Cloud infrastructure
 
 Example:
 
@@ -85,18 +90,28 @@ Each agent trace includes:
   "tokensUsed": 318,
   "status": "completed",
   "edge": "fra-edge-03",
-  "startedAt": "2026-06-10T16:30:00.000Z"
+  "startedAt": "2026-06-10T16:30:00.000Z",
+  "routeProvider": "akamai-cloud",
+  "infrastructureRegion": "US, Fremont, CA",
+  "routeFallback": true
 }
 ```
 
 ## Replacing mock integrations
 
-Implement `RoutingAdapter` in `lib/adapters/akamai.ts` and `MagnificAdapter` in `lib/adapters/magnific.ts`, then swap the exported adapter instances. Agent call sites do not need to change.
+The Akamai Cloud routing adapter in `lib/adapters/akamai.ts` queries the live
+Linode API for instances and regions. It routes to a matching regional Linode
+when one exists and marks the primary instance as a fallback when it does not.
+Set `USE_REAL_AKAMAI=true` and provide `AKAMAI_CLOUD_TOKEN`.
+
+Implement `MagnificAdapter` in `lib/adapters/magnific.ts`, then swap the
+exported adapter instance. Agent call sites do not need to change.
 
 The OpenAI adapter is already implemented in `lib/adapters/inference.ts`. Set `USE_REAL_OPENAI=true` and provide `OPENAI_API_KEY` to use it.
 
 ## MVP notes
 
 - Generated campaigns are stored in memory and reset when the server restarts.
-- Akamai and Magnific are intentionally mocked behind production-shaped interfaces.
-- `npm install` currently reports two upstream dependency audit findings. Review dependency upgrades before production use.
+- Real Akamai metadata does not move execution between servers by itself. Add Linodes and agent workers in EU/APAC to enable true regional execution.
+- Magnific remains mocked behind a production-shaped interface.
+- Review dependency audit findings before production use.

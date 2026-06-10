@@ -21,6 +21,9 @@ export interface AgentRun {
   status: AgentStatus;
   edge: string;
   startedAt: string;
+  routeProvider: "mock-akamai" | "akamai-cloud";
+  infrastructureRegion: string;
+  routeFallback: boolean;
 }
 
 export interface RegionalCampaign {
@@ -35,6 +38,8 @@ export interface VisualConcept {
   prompt: string;
   format: string;
   assetUrl: string;
+  assetProvider: "mock-magnific" | "magnific";
+  assetStatus: "placeholder" | "enhanced";
 }
 export interface Campaign {
   id: string;
@@ -58,4 +63,22 @@ export interface ObservabilitySummary {
   wallClockLatencyMs: number;
   regions: Region[];
   agentRuns: AgentRun[];
+}
+
+export interface AkamaiCloudInstance {
+  id: number;
+  label: string;
+  region: string;
+  regionLabel: string;
+  country: string;
+  status: string;
+  ipv4: string[];
+  tags: string[];
+}
+
+export interface AkamaiInfrastructure {
+  provider: "akamai-cloud";
+  connected: boolean;
+  instances: AkamaiCloudInstance[];
+  fetchedAt: string;
 }

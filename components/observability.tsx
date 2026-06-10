@@ -29,6 +29,10 @@ export function Observability({ runs }: { runs: AgentRun[] }) {
         Math.min(...runs.map((item) => new Date(item.startedAt).getTime())),
     ),
   );
+  const cloudRuns = runs.filter((run) => run.routeProvider === "akamai-cloud");
+  const infrastructureRegions = new Set(
+    cloudRuns.map((run) => run.infrastructureRegion),
+  ).size;
   return (
     <section id="observability" className="section-shell">
       <div className="eyebrow">06 / OPERATIONS</div>
@@ -41,7 +45,16 @@ export function Observability({ runs }: { runs: AgentRun[] }) {
         </div>
         <span className="live-dot">● LIVE TRACE</span>
       </div>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <Metric
+          label="Akamai routing"
+          value={cloudRuns.length ? "LIVE" : "MOCK"}
+          detail={
+            cloudRuns.length
+              ? `${infrastructureRegions} real infrastructure region${infrastructureRegions === 1 ? "" : "s"}`
+              : "Adapter fallback active"
+          }
+        />
         <Metric
           label="Agents completed"
           value={`${runs.length}/9`}
@@ -109,14 +122,21 @@ export function Observability({ runs }: { runs: AgentRun[] }) {
                     {run.agentName}
                   </p>
                   <p className="text-[11px] text-slate-500">
-                    {run.region} · {run.edge} · {run.tokensUsed} tokens
+                    {run.region} intent · {run.infrastructureRegion} ·{" "}
+                    {run.tokensUsed} tokens
                   </p>
                 </div>
                 <div className="text-right">
                   <p className="font-mono text-xs text-slate-300">
                     {run.latencyMs}ms
                   </p>
-                  <p className="text-[10px] text-lime">COMPLETED</p>
+                  <p
+                    className={`text-[10px] ${
+                      run.routeFallback ? "text-amber-400" : "text-lime"
+                    }`}
+                  >
+                    {run.routeFallback ? "CLOUD FALLBACK" : "COMPLETED"}
+                  </p>
                 </div>
               </div>
             ))}

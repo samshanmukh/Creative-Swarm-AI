@@ -63,24 +63,27 @@ export const demoCampaign: Campaign = {
       prompt:
         "Editorial 3D visualization of luminous AI agents moving code tasks through a distributed workflow graph, obsidian background, electric lime and violet, premium SaaS campaign, no text",
       format: "16:9 hero",
-      assetUrl:
-        "https://placehold.co/1200x675/171a28/c7ff47?text=Magnific+Enhanced+01",
+      assetUrl: "/api/assets/mock?index=0&prompt=Neon%20workflow%20swarm",
+      assetProvider: "mock-magnific",
+      assetStatus: "placeholder",
     },
     {
       title: "Before / after sprint",
       prompt:
         "Split-screen conceptual ad: overloaded developer task board transforming into an elegant autonomous agent pipeline, cinematic studio lighting, dark UI aesthetic, no text",
       format: "1:1 social",
-      assetUrl:
-        "https://placehold.co/800x800/171a28/8b5cf6?text=Magnific+Enhanced+02",
+      assetUrl: "/api/assets/mock?index=1&prompt=Before%20after%20sprint",
+      assetProvider: "mock-magnific",
+      assetStatus: "placeholder",
     },
     {
       title: "Global agent relay",
       prompt:
         "Abstract global relay of software agents across US Europe and APAC, flowing code particles, sophisticated technical visualization, black background, lime accents, no text",
       format: "4:5 social",
-      assetUrl:
-        "https://placehold.co/800x1000/171a28/c7ff47?text=Magnific+Enhanced+03",
+      assetUrl: "/api/assets/mock?index=2&prompt=Global%20agent%20relay",
+      assetProvider: "mock-magnific",
+      assetStatus: "placeholder",
     },
   ],
   criticSummary:
@@ -114,5 +117,8 @@ export const demoCampaign: Campaign = {
     startedAt: new Date(
       new Date("2026-06-10T09:30:00Z").getTime() + index * 90,
     ).toISOString(),
+    routeProvider: "mock-akamai" as const,
+    infrastructureRegion: region as string,
+    routeFallback: false,
   })),
 };

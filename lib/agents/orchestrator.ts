@@ -133,6 +133,9 @@ export async function runAgent<T>(
       status: "completed",
       edge: route.edge,
       startedAt,
+      routeProvider: route.provider,
+      infrastructureRegion: route.infrastructureRegion,
+      routeFallback: route.fallback,
     },
   };
 }
@@ -187,6 +190,8 @@ export async function generateCampaign(product: string): Promise<Campaign> {
   const visualConcepts = visuals.data.visualConcepts.map((concept, index) => ({
     ...concept,
     assetUrl: enhanced[index].assetUrl,
+    assetProvider: enhanced[index].provider,
+    assetStatus: enhanced[index].status,
   }));
   const magnific = await runAgent<{ summary: string }>(
     "MagnificAgent",
