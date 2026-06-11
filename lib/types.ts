@@ -33,6 +33,11 @@ export interface RegionalCampaign {
   cta: string;
   channel: string;
 }
+export interface AssetVariation {
+  url: string;
+  provider: "mock-magnific" | "magnific";
+}
+
 export interface VisualConcept {
   title: string;
   prompt: string;
@@ -40,6 +45,7 @@ export interface VisualConcept {
   assetUrl: string;
   assetProvider: "mock-magnific" | "magnific";
   assetStatus: "placeholder" | "enhanced";
+  assetVariations?: AssetVariation[];
 }
 export interface Campaign {
   id: string;

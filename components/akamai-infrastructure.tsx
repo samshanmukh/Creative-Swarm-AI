@@ -5,14 +5,9 @@ import { AkamaiInfrastructure } from "@/lib/types";
 
 type Status = "loading" | "connected" | "unavailable";
 
-export function AkamaiInfrastructurePanel({
-  compact = false,
-}: {
-  compact?: boolean;
-}) {
+export function AkamaiInfrastructurePanel({ compact = false }: { compact?: boolean }) {
   const [status, setStatus] = useState<Status>("loading");
-  const [infrastructure, setInfrastructure] =
-    useState<AkamaiInfrastructure | null>(null);
+  const [infrastructure, setInfrastructure] = useState<AkamaiInfrastructure | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -29,9 +24,7 @@ export function AkamaiInfrastructurePanel({
       .catch(() => {
         if (active) setStatus("unavailable");
       });
-    return () => {
-      active = false;
-    };
+    return () => { active = false; };
   }, []);
 
   const instances = infrastructure?.instances ?? [];
@@ -43,7 +36,7 @@ export function AkamaiInfrastructurePanel({
       className={`overflow-hidden rounded-2xl border ${
         status === "connected"
           ? "border-lime/20 bg-lime/[.035]"
-          : "border-white/10 bg-panel/70"
+          : "border-white/10 bg-panel"
       }`}
     >
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-5 py-4">
@@ -72,7 +65,7 @@ export function AkamaiInfrastructurePanel({
           className={`rounded-full border px-3 py-1 font-mono text-[9px] ${
             status === "connected"
               ? "border-lime/20 bg-lime/10 text-lime"
-              : "border-white/10 text-slate-500"
+              : "border-white/10 bg-panel text-slate-500"
           }`}
         >
           {status === "connected" ? "CONNECTED" : status.toUpperCase()}
@@ -91,24 +84,12 @@ export function AkamaiInfrastructurePanel({
               : "Infrastructure metadata will appear here."}
           </p>
           <div className="mt-5 grid grid-cols-2 gap-3">
-            <InfrastructureMetric
-              label="Status"
-              value={primary?.status.toUpperCase() ?? "—"}
-            />
-            <InfrastructureMetric
-              label="Public IP"
-              value={primary?.ipv4[0] ?? "—"}
-            />
+            <InfrastructureMetric label="Status" value={primary?.status.toUpperCase() ?? "—"} />
+            <InfrastructureMetric label="Public IP" value={primary?.ipv4[0] ?? "—"} />
             {!compact && (
               <>
-                <InfrastructureMetric
-                  label="Instances"
-                  value={instances.length.toString()}
-                />
-                <InfrastructureMetric
-                  label="Live regions"
-                  value={activeRegions.toString()}
-                />
+                <InfrastructureMetric label="Instances" value={instances.length.toString()} />
+                <InfrastructureMetric label="Live regions" value={activeRegions.toString()} />
               </>
             )}
           </div>
@@ -126,16 +107,8 @@ export function AkamaiInfrastructurePanel({
               status={status === "connected" ? "LIVE" : "MOCK"}
               live={status === "connected"}
             />
-            <RouteNode
-              region="EU"
-              location={primary?.regionLabel ?? "US West"}
-              status="FALLBACK"
-            />
-            <RouteNode
-              region="APAC"
-              location={primary?.regionLabel ?? "US West"}
-              status="FALLBACK"
-            />
+            <RouteNode region="EU" location={primary?.regionLabel ?? "US West"} status="FALLBACK" />
+            <RouteNode region="APAC" location={primary?.regionLabel ?? "US West"} status="FALLBACK" />
           </div>
           {!compact && (
             <p className="mt-4 text-xs leading-5 text-slate-600">
@@ -150,18 +123,10 @@ export function AkamaiInfrastructurePanel({
   );
 }
 
-function InfrastructureMetric({
-  label,
-  value,
-}: {
-  label: string;
-  value: string;
-}) {
+function InfrastructureMetric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl border border-white/[.07] bg-black/10 px-3 py-3">
-      <p className="font-mono text-[8px] tracking-[.15em] text-slate-600">
-        {label}
-      </p>
+    <div className="rounded-xl border border-white/10 bg-ink px-3 py-3">
+      <p className="font-mono text-[8px] tracking-[.15em] text-slate-600">{label}</p>
       <p className="mt-1 truncate text-xs font-medium text-slate-300">{value}</p>
     </div>
   );
@@ -179,7 +144,7 @@ function RouteNode({
   live?: boolean;
 }) {
   return (
-    <div className="rounded-xl border border-white/[.07] bg-black/10 p-4">
+    <div className="rounded-xl border border-white/10 bg-ink p-4">
       <div className="flex items-center justify-between gap-2">
         <span className="text-sm font-semibold text-white">{region}</span>
         <span className={`font-mono text-[8px] ${live ? "text-lime" : "text-amber-400"}`}>

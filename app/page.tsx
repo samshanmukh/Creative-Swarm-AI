@@ -80,18 +80,19 @@ export default function Home() {
           </span>
           <a
             href="/campaign/demo-swarm-001"
-            className="rounded-full border border-white/10 px-4 py-2 text-xs text-slate-300"
+            className="rounded-full border border-white/10 bg-panel px-4 py-2 text-xs text-slate-300 transition hover:border-white/20 hover:text-white"
           >
             View demo
           </a>
           <a
             href="#infrastructure"
-            className="hidden rounded-full border border-lime/20 bg-lime/5 px-4 py-2 text-xs text-lime md:block"
+            className="hidden rounded-full border border-lime/20 bg-lime/10 px-4 py-2 text-xs text-lime transition hover:bg-lime/15 md:block"
           >
             Akamai live
           </a>
         </div>
       </nav>
+
       <section className="relative mx-auto max-w-6xl px-6 pb-28 pt-24 text-center md:pt-36">
         <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-lime/20 bg-lime/5 px-3 py-1.5 font-mono text-[10px] tracking-wider text-lime">
           <span className="animate-pulse">●</span> 9 AGENTS READY TO DEPLOY
@@ -114,6 +115,7 @@ export default function Home() {
           <Stat value="1" label="unified campaign" />
         </div>
       </section>
+
       <section className="mx-auto max-w-7xl border-t border-white/10 px-6 py-20">
         <div className="mb-10 grid gap-3 md:grid-cols-2">
           <div>
@@ -146,6 +148,7 @@ export default function Home() {
           ))}
         </div>
       </section>
+
       <section
         id="infrastructure"
         className="mx-auto max-w-7xl border-t border-white/10 px-6 py-20"
@@ -162,6 +165,7 @@ export default function Home() {
         </div>
         <AkamaiInfrastructurePanel />
       </section>
+
       <section className="mx-auto max-w-7xl border-t border-white/10 px-6 py-20">
         <div className="grid gap-8 lg:grid-cols-[.75fr_1.25fr]">
           <div>
@@ -183,6 +187,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+
       <section className="mx-auto max-w-7xl border-t border-white/10 px-6 py-20">
         <div className="mb-10 grid gap-3 md:grid-cols-2">
           <div>
@@ -240,16 +245,16 @@ export default function Home() {
     </main>
   );
 }
+
 function Stat({ value, label }: { value: string; label: string }) {
   return (
     <div>
       <p className="text-2xl font-semibold text-white">{value}</p>
-      <p className="mt-1 text-[10px] uppercase tracking-widest text-slate-600">
-        {label}
-      </p>
+      <p className="mt-1 text-[10px] uppercase tracking-widest text-slate-600">{label}</p>
     </div>
   );
 }
+
 function PoweredByCard({
   name,
   badge,
@@ -272,7 +277,7 @@ function PoweredByCard({
           <p className="text-xl font-semibold text-white">{name}</p>
           <p className="mt-1 font-mono text-[10px] text-slate-500">{model}</p>
         </div>
-        <span className={`shrink-0 rounded-full border border-white/10 bg-white/[.04] px-3 py-1 font-mono text-[9px] ${badgeColor}`}>
+        <span className={`shrink-0 rounded-full border border-white/10 bg-panel px-3 py-1 font-mono text-[9px] ${badgeColor}`}>
           {badge}
         </span>
       </div>

@@ -63,27 +63,27 @@ export const demoCampaign: Campaign = {
       prompt:
         "Editorial 3D visualization of luminous AI agents moving code tasks through a distributed workflow graph, obsidian background, electric lime and violet, premium SaaS campaign, no text",
       format: "16:9 hero",
-      assetUrl: "/api/assets/mock?index=0&prompt=Neon%20workflow%20swarm",
-      assetProvider: "mock-magnific",
-      assetStatus: "placeholder",
+      assetUrl: "/assets/neon-workflow-swarm.jpg",
+      assetProvider: "magnific",
+      assetStatus: "enhanced",
     },
     {
       title: "Before / after sprint",
       prompt:
         "Split-screen conceptual ad: overloaded developer task board transforming into an elegant autonomous agent pipeline, cinematic studio lighting, dark UI aesthetic, no text",
       format: "1:1 social",
-      assetUrl: "/api/assets/mock?index=1&prompt=Before%20after%20sprint",
-      assetProvider: "mock-magnific",
-      assetStatus: "placeholder",
+      assetUrl: "/assets/before-after-sprint.jpg",
+      assetProvider: "magnific",
+      assetStatus: "enhanced",
     },
     {
       title: "Global agent relay",
       prompt:
         "Abstract global relay of software agents across US Europe and APAC, flowing code particles, sophisticated technical visualization, black background, lime accents, no text",
       format: "4:5 social",
-      assetUrl: "/api/assets/mock?index=2&prompt=Global%20agent%20relay",
-      assetProvider: "mock-magnific",
-      assetStatus: "placeholder",
+      assetUrl: "/assets/global-agent-relay.jpg",
+      assetProvider: "magnific",
+      assetStatus: "enhanced",
     },
   ],
   criticSummary:

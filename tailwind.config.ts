@@ -9,7 +9,7 @@ export default {
         lime: "#c7ff47",
         violet: "#8b5cf6",
       },
-      boxShadow: { glow: "0 0 50px rgba(199,255,71,.12)" },
+      boxShadow: { glow: "0 0 50px rgba(199,255,71,.15)" },
     },
   },
   plugins: [],

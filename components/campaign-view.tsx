@@ -1,6 +1,8 @@
 import { Campaign } from "@/lib/types";
 import { Observability } from "@/components/observability";
 import { AkamaiInfrastructurePanel } from "@/components/akamai-infrastructure";
+import { VisualConceptSection } from "@/components/visual-concept-section";
+
 export function CampaignView({ campaign }: { campaign: Campaign }) {
   const totalTokens = campaign.agentRuns.reduce(
     (sum, run) => sum + run.tokensUsed,
@@ -15,7 +17,7 @@ export function CampaignView({ campaign }: { campaign: Campaign }) {
 
   return (
     <main className="pb-24">
-      <header className="border-b border-white/10">
+      <header className="border-b border-white/10 bg-ink">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
           <a href="/" className="font-semibold text-white">
             <span className="mr-2 text-lime">✦</span>Creative Swarm
@@ -26,13 +28,14 @@ export function CampaignView({ campaign }: { campaign: Campaign }) {
             </span>
             <a
               href="#observability"
-              className="rounded-full border border-white/10 px-4 py-2 text-xs text-white"
+              className="rounded-full border border-white/10 bg-panel px-4 py-2 text-xs text-white transition hover:border-white/20"
             >
               View trace
             </a>
           </div>
         </div>
       </header>
+
       <section className="mx-auto max-w-7xl px-6 pb-16 pt-14">
         <div className="eyebrow">CAMPAIGN INTELLIGENCE / COMPLETE</div>
         <h1 className="mt-5 max-w-4xl text-4xl font-semibold leading-[1.08] tracking-[-.04em] text-white md:text-6xl">
@@ -52,40 +55,30 @@ export function CampaignView({ campaign }: { campaign: Campaign }) {
           <Pill>{totalTokens.toLocaleString()} tokens</Pill>
         </div>
       </section>
+
       <section className="mx-auto max-w-7xl px-6 pb-16">
         <AkamaiInfrastructurePanel compact />
       </section>
+
       <section className="mx-auto max-w-7xl px-6 pb-16">
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-panel/70">
+        <div className="overflow-hidden rounded-2xl border border-white/10 bg-panel">
           <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
             <p className="card-label">LIVE WORKFLOW MAP</p>
             <span className="text-[10px] text-lime">COMPLETE</span>
           </div>
           <div className="grid gap-0 md:grid-cols-4">
-            <WorkflowStage
-              label="DISCOVER"
-              agents="Trend + Research"
-              region="GLOBAL"
-            />
-            <WorkflowStage
-              label="STRATEGIZE"
-              agents="Strategy"
-              region="GLOBAL"
-            />
+            <WorkflowStage label="DISCOVER" agents="Trend + Research" region="GLOBAL" />
+            <WorkflowStage label="STRATEGIZE" agents="Strategy" region="GLOBAL" />
             <WorkflowStage
               label="LOCALIZE"
               agents="US + EU + APAC"
               region={usesAkamaiCloud ? "AKAMAI CLOUD" : "3 MOCK EDGES"}
             />
-            <WorkflowStage
-              label="DELIVER"
-              agents="Visual + Magnific + Critic"
-              region="GLOBAL"
-              last
-            />
+            <WorkflowStage label="DELIVER" agents="Visual + Magnific + Critic" region="GLOBAL" last />
           </div>
         </div>
       </section>
+
       <Section
         num="01"
         label="MARKET SIGNAL"
@@ -95,14 +88,13 @@ export function CampaignView({ campaign }: { campaign: Campaign }) {
         <div className="grid gap-4 md:grid-cols-2">
           {campaign.trendInsights.map((t, i) => (
             <div className="card group" key={t}>
-              <p className="mb-8 font-mono text-xs text-lime">
-                0{i + 1} / SIGNAL
-              </p>
+              <p className="mb-8 font-mono text-xs text-lime">0{i + 1} / SIGNAL</p>
               <p className="text-lg leading-7 text-slate-200">{t}</p>
             </div>
           ))}
         </div>
       </Section>
+
       <Section
         num="02"
         label="GLOBAL STRATEGY"
@@ -117,14 +109,13 @@ export function CampaignView({ campaign }: { campaign: Campaign }) {
               </span>
               <p className="card-label">ANGLE 0{i + 1}</p>
               <h3>{a.title}</h3>
-              <p className="mt-3 text-lg text-lime">“{a.hook}”</p>
-              <p className="mt-5 text-sm leading-6 text-slate-500">
-                {a.rationale}
-              </p>
+              <p className="mt-3 text-lg text-lime">"{a.hook}"</p>
+              <p className="mt-5 text-sm leading-6 text-slate-500">{a.rationale}</p>
             </div>
           ))}
         </div>
       </Section>
+
       <Section
         num="03"
         label="EDGE LOCALIZATION"
@@ -139,79 +130,21 @@ export function CampaignView({ campaign }: { campaign: Campaign }) {
                 <span className="text-[10px] text-slate-500">{c.channel}</span>
               </div>
               <h3>{c.headline}</h3>
-              <p className="mt-4 min-h-20 text-sm leading-6 text-slate-400">
-                {c.body}
-              </p>
-              <button className="mt-6 w-full rounded-lg border border-white/10 py-3 text-xs font-medium text-white">
+              <p className="mt-4 min-h-20 text-sm leading-6 text-slate-400">{c.body}</p>
+              <button className="mt-6 w-full rounded-lg border border-white/10 bg-panel py-3 text-xs font-medium text-white transition hover:border-white/20 hover:bg-white/5">
                 {c.cta} →
               </button>
             </div>
           ))}
         </div>
       </Section>
-      <Section
-        num="04"
-        label="VISUAL SYSTEM"
-        title="Prompts with a point of view"
-        copy="Campaign-ready image directions generated from the strategy."
-      >
-        <div className="grid gap-4 lg:grid-cols-3">
-          {campaign.visualConcepts.map((v) => (
-            <div className="card" key={v.title}>
-              <div className="mb-5 aspect-[4/3] rounded-xl bg-[radial-gradient(circle_at_30%_20%,#c7ff4733,transparent_35%),radial-gradient(circle_at_75%_70%,#8b5cf633,transparent_40%),#090b13] p-5">
-                <div className="flex h-full items-end">
-                  <span className="rounded-full border border-white/10 bg-black/30 px-3 py-1 text-[10px] text-slate-300">
-                    {v.format}
-                  </span>
-                </div>
-              </div>
-              <h3 className="mt-0 text-lg">{v.title}</h3>
-              <p className="mt-3 line-clamp-4 text-xs leading-5 text-slate-500">
-                {v.prompt}
-              </p>
-            </div>
-          ))}
-        </div>
-      </Section>
-      <Section
-        num="05"
-        label="MAGNIFIC ENHANCEMENT"
-        title="Visual assets"
-        copy={
-          campaign.visualConcepts.some((concept) => concept.assetProvider === "magnific")
-            ? "Visuals enhanced through the live Magnific provider."
-            : "Preview assets are rendered from the mock adapter. VS Code MCP authentication is not shared with the app runtime."
-        }
-      >
-        <div className="grid gap-4 lg:grid-cols-3">
-          {campaign.visualConcepts.map((v, i) => (
-            <div className="card" key={v.assetUrl}>
-              <div className="relative aspect-[3/2] overflow-hidden rounded-xl border border-white/[.08] bg-panel">
-                {/* External providers return arbitrary signed URLs, so use a native image element. */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={v.assetUrl}
-                  alt={`${v.title} visual asset`}
-                  className="h-full w-full object-cover"
-                />
-                <span className="absolute left-3 top-3 rounded-full border border-white/10 bg-black/60 px-3 py-1 font-mono text-[9px] text-white backdrop-blur">
-                  ASSET 0{i + 1}
-                </span>
-              </div>
-              <div className="mt-4 flex items-center justify-between">
-                <p className="text-sm text-slate-300">{v.title}</p>
-                <span
-                  className={`text-[10px] ${
-                    v.assetProvider === "magnific" ? "text-lime" : "text-amber-400"
-                  }`}
-                >
-                  {v.assetProvider === "magnific" ? "MAGNIFIC LIVE" : "MOCK PREVIEW"}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </Section>
+
+      <VisualConceptSection
+        concepts={campaign.visualConcepts}
+        campaignId={campaign.id}
+        hasLiveProvider={campaign.visualConcepts.some((c) => c.assetProvider === "magnific")}
+      />
+
       <section className="section-shell">
         <div className="rounded-2xl border border-lime/20 bg-lime/[.045] p-6 md:flex md:items-center md:justify-between md:gap-12">
           <div>
@@ -223,6 +156,7 @@ export function CampaignView({ campaign }: { campaign: Campaign }) {
           </p>
         </div>
       </section>
+
       <Observability runs={campaign.agentRuns} />
     </main>
   );
@@ -240,9 +174,7 @@ function WorkflowStage({
   last?: boolean;
 }) {
   return (
-    <div
-      className={`relative border-white/10 p-5 md:border-r ${last ? "md:border-r-0" : ""}`}
-    >
+    <div className={`relative border-white/10 p-5 md:border-r ${last ? "md:border-r-0" : ""}`}>
       {!last && (
         <span className="absolute right-[-5px] top-1/2 z-10 hidden h-2 w-2 -translate-y-1/2 rounded-full bg-lime shadow-[0_0_15px_#c7ff47] md:block" />
       )}
@@ -252,6 +184,7 @@ function WorkflowStage({
     </div>
   );
 }
+
 function Section({
   num,
   label,
@@ -278,9 +211,10 @@ function Section({
     </section>
   );
 }
+
 function Pill({ children }: { children: React.ReactNode }) {
   return (
-    <span className="rounded-full border border-white/10 bg-white/[.03] px-3 py-1.5 text-[11px] text-slate-400">
+    <span className="rounded-full border border-white/10 bg-panel px-3 py-1.5 text-[11px] text-slate-400">
       {children}
     </span>
   );

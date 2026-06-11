@@ -2,6 +2,7 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { DEMO_PRODUCT } from "@/lib/mock-data";
+
 export function ProductForm() {
   const router = useRouter();
   const [product, setProduct] = useState(DEMO_PRODUCT);
@@ -36,10 +37,11 @@ export function ProductForm() {
       window.clearTimeout(stageTimer);
     }
   }
+
   return (
     <form
       onSubmit={submit}
-      className="relative mx-auto mt-12 max-w-3xl rounded-[28px] border border-white/10 bg-white/[.055] p-3 shadow-glow backdrop-blur-xl"
+      className="relative mx-auto mt-12 max-w-3xl rounded-[28px] border border-white/10 bg-panel p-3 shadow-glow"
     >
       <textarea
         aria-label="Product URL or description"
@@ -48,17 +50,15 @@ export function ProductForm() {
         maxLength={2000}
         rows={3}
         className="w-full resize-none bg-transparent px-4 py-4 text-lg text-white outline-none placeholder:text-slate-500"
-        placeholder="Paste a product URL or describe what you’re launching…"
+        placeholder="Paste a product URL or describe what you're launching…"
       />
       <div className="flex items-center justify-between border-t border-white/10 px-3 pt-3">
         <span className="hidden text-xs text-slate-500 sm:block">
-          {loading
-            ? stage
-            : "9 specialized agents · 3 edge regions · one creative brief"}
+          {loading ? stage : "9 specialized agents · 3 edge regions · one creative brief"}
         </span>
         <button
           disabled={loading}
-          className="rounded-full bg-lime px-6 py-3 text-sm font-bold text-ink transition hover:scale-[1.02] disabled:opacity-60"
+          className="rounded-full bg-lime px-6 py-3 text-sm font-bold text-ink transition hover:scale-[1.02] hover:brightness-110 disabled:opacity-60"
         >
           {loading ? "Deploying swarm..." : "Generate campaign →"}
         </button>

@@ -124,8 +124,6 @@ export class MagnificMCPAdapter implements MagnificAdapter {
     const tools = await getTools(this.apiKey);
     const tool = pickEnhanceTool(tools);
 
-    // Build arguments — include every field the tool schema declares; fall back
-    // to a sensible minimal set when the schema isn't available.
     const schema = tool.inputSchema?.properties ?? {};
     const hasField = (name: string) => name in schema;
 
@@ -162,15 +160,14 @@ class ResilientMagnificAdapter implements MagnificAdapter {
   }
 
   async enhance(prompt: string, index = 0): Promise<EnhancedAsset> {
-    if (process.env.USE_REAL_MAGNIFIC !== "true" || !this.mcp) {
-      return this.mock.enhance(prompt, index);
+    if (process.env.USE_REAL_MAGNIFIC === "true" && this.mcp) {
+      try {
+        return await this.mcp.enhance(prompt, index);
+      } catch (error) {
+        console.error("Magnific MCP unavailable; using mock asset", error);
+      }
     }
-    try {
-      return await this.mcp.enhance(prompt, index);
-    } catch (error) {
-      console.error("Magnific MCP unavailable; using mock asset", error);
-      return this.mock.enhance(prompt, index);
-    }
+    return this.mock.enhance(prompt, index);
   }
 }
 

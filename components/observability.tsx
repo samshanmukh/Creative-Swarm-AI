@@ -9,12 +9,14 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+
 const regionColor: Record<string, string> = {
   Global: "bg-lime",
   US: "bg-sky-400",
   EU: "bg-violet-400",
   APAC: "bg-amber-400",
 };
+
 export function Observability({ runs }: { runs: AgentRun[] }) {
   const totalTokens = runs.reduce((s, r) => s + r.tokensUsed, 0);
   const avg = Math.round(
@@ -33,15 +35,14 @@ export function Observability({ runs }: { runs: AgentRun[] }) {
   const infrastructureRegions = new Set(
     cloudRuns.map((run) => run.infrastructureRegion),
   ).size;
+
   return (
     <section id="observability" className="section-shell">
       <div className="eyebrow">06 / OPERATIONS</div>
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h2>Swarm observability</h2>
-          <p className="section-copy">
-            Every creative decision, traced across the edge.
-          </p>
+          <p className="section-copy">Every creative decision, traced across the edge.</p>
         </div>
         <span className="live-dot">● LIVE TRACE</span>
       </div>
@@ -55,26 +56,10 @@ export function Observability({ runs }: { runs: AgentRun[] }) {
               : "Adapter fallback active"
           }
         />
-        <Metric
-          label="Agents completed"
-          value={`${runs.length}/9`}
-          detail="100% success rate"
-        />
-        <Metric
-          label="Average latency"
-          value={`${avg} ms`}
-          detail="Parallel execution"
-        />
-        <Metric
-          label="Tokens used"
-          value={totalTokens.toLocaleString()}
-          detail={`${regions} active regions`}
-        />
-        <Metric
-          label="Wall-clock runtime"
-          value={`${wallClock} ms`}
-          detail="Fan-out execution"
-        />
+        <Metric label="Agents completed" value={`${runs.length}/9`} detail="100% success rate" />
+        <Metric label="Average latency" value={`${avg} ms`} detail="Parallel execution" />
+        <Metric label="Tokens used" value={totalTokens.toLocaleString()} detail={`${regions} active regions`} />
+        <Metric label="Wall-clock runtime" value={`${wallClock} ms`} detail="Fan-out execution" />
       </div>
       <div className="mt-5 grid gap-5 lg:grid-cols-[1fr_1.4fr]">
         <div className="card min-h-72">
@@ -109,32 +94,21 @@ export function Observability({ runs }: { runs: AgentRun[] }) {
             <p className="card-label">Distributed execution trace</p>
           </div>
           <div>
-            {runs.map((run, i) => (
+            {runs.map((run) => (
               <div
                 key={run.agentName}
                 className="grid grid-cols-[24px_1fr_auto] items-center gap-3 border-b border-white/[.06] px-5 py-3 last:border-0"
               >
-                <span
-                  className={`h-2 w-2 rounded-full ${regionColor[run.region]}`}
-                />
+                <span className={`h-2 w-2 rounded-full ${regionColor[run.region]}`} />
                 <div>
-                  <p className="text-sm font-medium text-white">
-                    {run.agentName}
-                  </p>
+                  <p className="text-sm font-medium text-white">{run.agentName}</p>
                   <p className="text-[11px] text-slate-500">
-                    {run.region} intent · {run.infrastructureRegion} ·{" "}
-                    {run.tokensUsed} tokens
+                    {run.region} intent · {run.infrastructureRegion} · {run.tokensUsed} tokens
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="font-mono text-xs text-slate-300">
-                    {run.latencyMs}ms
-                  </p>
-                  <p
-                    className={`text-[10px] ${
-                      run.routeFallback ? "text-amber-400" : "text-lime"
-                    }`}
-                  >
+                  <p className="font-mono text-xs text-slate-300">{run.latencyMs}ms</p>
+                  <p className={`text-[10px] ${run.routeFallback ? "text-amber-400" : "text-lime"}`}>
                     {run.routeFallback ? "CLOUD FALLBACK" : "COMPLETED"}
                   </p>
                 </div>
@@ -146,21 +120,12 @@ export function Observability({ runs }: { runs: AgentRun[] }) {
     </section>
   );
 }
-function Metric({
-  label,
-  value,
-  detail,
-}: {
-  label: string;
-  value: string;
-  detail: string;
-}) {
+
+function Metric({ label, value, detail }: { label: string; value: string; detail: string }) {
   return (
     <div className="card">
       <p className="card-label">{label}</p>
-      <p className="mt-3 text-3xl font-semibold tracking-tight text-white">
-        {value}
-      </p>
+      <p className="mt-3 text-3xl font-semibold tracking-tight text-white">{value}</p>
       <p className="mt-2 text-xs text-lime">↗ {detail}</p>
     </div>
   );
